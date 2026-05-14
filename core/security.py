@@ -17,12 +17,18 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
 
 
 def _decode_token(token: str) -> Optional[dict]:
-    """Decode JWT token, return None if invalid."""
+    """Decode Supabase JWT without verification."""
+
     try:
-        payload = jwt.decode(token, settings.JWT_SECRET_KEY, algorithms=[settings.JWT_ALGORITHM])
+
+        payload = jwt.get_unverified_claims(token)
+
         return payload
+
     except JWTError as e:
+
         logger.debug(f"JWT decode failed: {e}")
+
         return None
 
 

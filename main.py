@@ -6,12 +6,13 @@ from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 from loguru import logger
+from routes import active_crop
 import time
 import sys
 
 from core.config import settings
 from core.mongodb import connect_mongodb, close_mongodb
-from routes import chat, disease, weather, fertilizer, crop, admin, soil, profile, mandi
+from routes import chat, disease, weather, fertilizer, crop, admin, soil, profile, mandi, farm_health
 
 # Configure Loguru
 logger.remove()
@@ -43,13 +44,22 @@ app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # CORS
+# CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.cors_origins,
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "https://kishansathii.netlify.app",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+
+
 
 # Request timing middleware
 @app.middleware("http")
@@ -79,7 +89,8 @@ app.include_router(admin.router)
 app.include_router(soil.router)
 app.include_router(profile.router)
 app.include_router(mandi.router)
-
+app.include_router(farm_health.router)
+app.include_router(active_crop.router)
 
 @app.get("/")
 async def root():

@@ -7,6 +7,9 @@ class Settings(BaseSettings):
     # AI
     GROQ_API_KEY: str = ""
 
+    # Mandi / AGMARKNET
+    DATA_GOV_IN_KEY: str = "579b464db66ec23bdd000001ca2bda2bc65b4c01721c23d6173ae944"
+
     # Weather
     OPENWEATHER_API_KEY: str = ""
 
